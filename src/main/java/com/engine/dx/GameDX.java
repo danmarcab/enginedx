@@ -1,27 +1,26 @@
 package com.engine.dx;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Screen;
+import com.engine.dx.screens.HeavyScreen;
 
-public class GameDX extends ApplicationAdapter{
-    SpriteBatch batch;
-    Texture img;
+public abstract class GameDX extends Game {
+    Screen loadingScreen;
 
-    @Override
-    public void create () {
-        batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
+    public void setLoadingScreen(Screen loadingScreen) {
+        this.loadingScreen = loadingScreen;
     }
 
-    @Override
-    public void render () {
-        Gdx.gl.glClearColor(1, 0, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(img, 0, 0);
-        batch.end();
+    public void setHeavyScreen(final HeavyScreen screen) {
+        if(loadingScreen != null)
+            setScreen(loadingScreen);
+
+        new Thread( new Runnable() {
+            @Override
+            public void run() {
+                screen.load();
+                setScreen(screen);
+            }
+        }).start();
     }
 }
