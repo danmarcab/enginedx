@@ -3,6 +3,7 @@ package com.engine.dx;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Screen;
 import com.engine.dx.screens.HeavyScreen;
+import com.engine.dx.screens.HeavyScreenLoader;
 
 public abstract class GameDX extends Game {
     Screen loadingScreen;
@@ -15,12 +16,6 @@ public abstract class GameDX extends Game {
         if(loadingScreen != null)
             setScreen(loadingScreen);
 
-        new Thread( new Runnable() {
-            @Override
-            public void run() {
-                screen.load();
-                setScreen(screen);
-            }
-        }).start();
+        new HeavyScreenLoader(this, screen).load();
     }
 }
