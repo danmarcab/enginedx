@@ -1,21 +1,32 @@
 package com.engine.dx;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Screen;
-import com.engine.dx.screens.HeavyScreen;
-import com.engine.dx.screens.HeavyScreenLoader;
+import com.badlogic.gdx.assets.AssetManager;
+import com.engine.dx.screens.DXScreen;
+import com.engine.dx.screens.LoadingScreen;
 
 public abstract class GameDX extends Game {
-    Screen loadingScreen;
+    AssetManager assetManager;
+    LoadingScreen defaultLoadingScreen;
 
-    public void setLoadingScreen(Screen loadingScreen) {
-        this.loadingScreen = loadingScreen;
+    public GameDX() {
+        assetManager = new AssetManager();
     }
 
-    public void setHeavyScreen(final HeavyScreen screen) {
-        if(loadingScreen != null)
-            setScreen(loadingScreen);
+    public void setDefaultLoadingScreen(LoadingScreen loadingScreen) {
+        this.defaultLoadingScreen = loadingScreen;
+    }
 
-        new HeavyScreenLoader(this, screen).load();
+    public void loadScreen(DXScreen screen, LoadingScreen loadingScreen) {
+        loadingScreen.loadScreen(screen);
+        setScreen(loadingScreen);
+    }
+
+    public void loadScreen(DXScreen screen) {
+        loadScreen(screen, defaultLoadingScreen);
+    }
+
+    public AssetManager assetManager() {
+        return assetManager;
     }
 }
